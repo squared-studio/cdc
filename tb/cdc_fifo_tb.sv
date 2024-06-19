@@ -140,7 +140,6 @@ module cdc_fifo_tb;
                 logic [ELEM_WIDTH-1:0] data_out;
                 elem_in_mon_mbx.get(data_in);
                 elem_out_mon_mbx.get(data_out);
-                $display("I:0x%0h O:0x%0h", data_in, data_out);
                 if (data_in === data_out) pass++;
                 else                      fail++;
             end
