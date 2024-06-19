@@ -122,18 +122,16 @@ module cdc_fifo_tb;
             end
 
             forever begin // in monitor
-                logic [ELEM_WIDTH-1:0] data;
                 @ (posedge elem_in_clk_i);
                 if ((elem_in_valid_i === '1) && (elem_in_ready_o === '1)) begin
-                    elem_in_mon_mbx.put(data);
+                    elem_in_mon_mbx.put(elem_in_i);
                 end
             end
 
             forever begin // out monitor
-                logic [ELEM_WIDTH-1:0] data;
                 @ (posedge elem_out_clk_i);
                 if ((elem_out_valid_o === '1) && (elem_out_ready_i === '1)) begin
-                    elem_out_mon_mbx.put(data);
+                    elem_out_mon_mbx.put(elem_out_o);
                 end
             end
 
@@ -142,7 +140,7 @@ module cdc_fifo_tb;
                 logic [ELEM_WIDTH-1:0] data_out;
                 elem_in_mon_mbx.get(data_in);
                 elem_out_mon_mbx.get(data_out);
-                // $display("I:0x%0h O:0x%0h", data_in, data_out);
+                $display("I:0x%0h O:0x%0h", data_in, data_out);
                 if (data_in === data_out) pass++;
                 else                      fail++;
             end
