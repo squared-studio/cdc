@@ -1,5 +1,4 @@
 module cdc_fifo_tb;
-
     // Marking the start and end of Simulation
     initial $display("\033[7;36m TEST STARTED \033[0m");
     final   $display("\033[7;36m TEST ENDED \033[0m");
@@ -194,17 +193,23 @@ module cdc_fifo_tb;
 
         // Apply asynchronous global reset
         apply_reset();
-
+        
         // Start all the verification components
         start_driver_monitor_scoreboard();
 
         // Start clock 
         start_clock();
-
+        
         // generate 100 random data inputs
         fork
-            repeat (tc) elem_in_dvr_mbx.put ($urandom);
-            repeat (tc) elem_out_dvr_mbx.put($urandom);
+            begin
+                @(posedge elem_in_clk_i);
+                repeat (tc) elem_in_dvr_mbx.put ($urandom);
+            end
+            begin
+                @(posedge elem_out_clk_i);
+                repeat (tc) elem_out_dvr_mbx.put($urandom);
+            end
         join
 
         // Wait for the end of all valid data
